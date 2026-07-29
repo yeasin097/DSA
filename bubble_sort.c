@@ -1,37 +1,52 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-void swap(int *a, int *b){
-    *a=*a+*b;
-    *b=*a-*b;
-    *a=*a-*b;
-
+void bubble_sort(int arr[], int n) {
+	for (int i = 0; i < n - 1; ++i) {
+		int swapped = 0;
+		for (int j = 0; j < n - 1 - i; ++j) {
+			if (arr[j] > arr[j + 1]) {
+				int tmp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = tmp;
+				swapped = 1;
+			}
+		}
+		if (!swapped) break;
+	}
 }
 
-void bubble_sort(int arr[], int n){
-    for(int i=0; i<n-1; i++)
-    {
-        for(int j=i+1; j<n; j++){
-            if(arr[i]>arr[j]){
-                    //swap(&arr[i], &arr[j]);
-                    int temp=arr[i];
-                    arr[i]=arr[j];
-                    arr[j]=temp;
-            }
-        }
-    }
+void print_array(int arr[], int n) {
+	for (int i = 0; i < n; ++i) {
+		if (i) putchar(' ');
+		printf("%d", arr[i]);
+	}
+	putchar('\n');
 }
 
+int main(void) {
+	int n;
+	if (scanf("%d", &n) != 1) {
+		fprintf(stderr, "Usage: provide N followed by N integers on stdin\n");
+		return 1;
+	}
+	if (n <= 0) return 0;
+	int *a = malloc(sizeof(int) * n);
+	if (!a) {
+		perror("malloc");
+		return 1;
+	}
+	for (int i = 0; i < n; ++i) {
+		if (scanf("%d", &a[i]) != 1) {
+			fprintf(stderr, "Expected %d integers, got fewer\n", n);
+			free(a);
+			return 1;
+		}
+	}
 
-void print_array(int array[], int n){
-    for(int i=0; i<n; i++){
-        printf("%d ", array[i]);
-    }
-    printf("\n");
-}
-int main(){
+	bubble_sort(a, n);
+	print_array(a, n);
 
-    int array[7]={2,1,4,8,3,5,0};
-    print_array(array, 7);
-    bubble_sort(array, 7);
-    print_array(array, 7);
+	free(a);
+	return 0;
 }
